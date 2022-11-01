@@ -11,15 +11,15 @@ const (
 )
 
 const (
-	BLANKCHAR     = " "
-	BOXCHAR       = "o"
-	OBSTACLECHAR  = "x"
-	PLAYERCHAR    = "*"
-	GOALCHAR      = "."
-	BOXONGOALCHAR = "&"
-	PLAYERONGOALCHAR=","
-	VSEPERATOR    = "|"
-	HSEPERATOR    = "-"
+	BLANKCHAR     = "🔲"
+	BOXCHAR       = "🟩"
+	OBSTACLECHAR  = "🟥"
+	PLAYERCHAR    = "🐈"
+	GOALCHAR      = "⭕"
+	BOXONGOALCHAR = "✅"
+	PLAYERONGOALCHAR="😿"
+	VSEPERATOR    = "┊"
+	HSEPERATOR    = "╌"
 )
 
 const (

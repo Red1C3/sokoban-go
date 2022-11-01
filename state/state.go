@@ -8,13 +8,13 @@ import (
 	"strings"
 )
 
-type state struct {
+type State struct {
 	tiles     [][]int
 	playerPos [2]int
 }
 
-func NewState(puzzlePath string) state {
-	var s state
+func NewState(puzzlePath string) State {
+	var s State
 	puzzleFile, err := os.Open(puzzlePath)
 	if err != nil {
 		log.Fatalf("Failed to open file %s", puzzlePath)
@@ -67,7 +67,7 @@ func NewState(puzzlePath string) state {
 	return s
 }
 
-func (s *state) String() string {
+func (s *State) String() string {
 	var buffer bytes.Buffer
 	for _, a := range s.tiles {
 		buffer.WriteString(VSEPERATOR)
@@ -91,12 +91,12 @@ func (s *state) String() string {
 				log.Fatalf("Unknown puzzle digit %d", v)
 			}
 		}
-		buffer.WriteString("\n" + strings.Repeat(HSEPERATOR, len(a)*2+1) + "\n")
+		buffer.WriteString("\n" + strings.Repeat(HSEPERATOR, len(a)*3+1) + "\n")
 	}
 	return buffer.String()
 }
 
-func (s *state) Equals(o *state) bool {
+func (s *State) Equals(o *State) bool {
 	for i, a := range s.tiles {
 		for j := range a {
 			if s.tiles[i][j] != o.tiles[i][j] {
@@ -107,7 +107,7 @@ func (s *state) Equals(o *state) bool {
 	return true
 }
 
-func (s *state) canMove(dir int) bool {
+func (s *State) canMove(dir int) bool {
 	next := [2]int{0, 0}
 	switch dir {
 	case UP:
@@ -138,8 +138,8 @@ func (s *state) canMove(dir int) bool {
 	}
 }
 
-func (s *state) makeCopy() state {
-	newState := state{playerPos: s.playerPos}
+func (s *State) makeCopy() State {
+	newState := State{playerPos: s.playerPos}
 	newState.tiles = make([][]int, len(s.tiles))
 	for i, arr := range s.tiles {
 		newState.tiles[i] = make([]int, len(arr))
@@ -149,7 +149,7 @@ func (s *state) makeCopy() state {
 }
 
 // Assumes canMove is true
-func (s *state) move(dir int) state {
+func (s *State) move(dir int) State {
 	newState := s.makeCopy()
 	switch dir {
 	case UP:
@@ -188,8 +188,8 @@ func (s *state) move(dir int) state {
 	return newState
 }
 
-func (s *state) States() []state {
-	states := make([]state, 0)
+func (s *State) States() []State {
+	states := make([]State, 0)
 	if s.canMove(UP) {
 		states = append(states, s.move(UP))
 	}
@@ -205,7 +205,7 @@ func (s *state) States() []state {
 	return states
 }
 
-func (s *state) IsSolved() bool {
+func (s *State) IsSolved() bool {
 	for _, a := range s.tiles {
 		for _, v := range a {
 			if v^GOAL == 0 {
