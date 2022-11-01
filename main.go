@@ -5,6 +5,6 @@ import (
 )
 
 func main() {
-	s := state.NewState("./puzzles/test.json")
-	print(s.String())
+	s := state.NewState("./puzzles/test 1.json")
+	print(s.States()[0].String())
 }

@@ -55,6 +55,10 @@ func NewState(puzzlePath string) state {
 				s.playerPos = [2]int{i + 1, j + 1}
 			case GOALCHAR:
 				s.tiles[i+BORDER][j+BORDER] = GOAL
+			case BOXONGOALCHAR:
+				s.tiles[i+BORDER][j+BORDER] = BOXONGOAL
+			case PLAYERONGOALCHAR:
+				s.tiles[i+BORDER][j+BORDER] = PLAYERONGOAL
 			default:
 				log.Fatalf("Unknown puzzle char %s", v)
 			}
@@ -79,6 +83,10 @@ func (s *state) String() string {
 				buffer.WriteString(PLAYERCHAR + VSEPERATOR)
 			case GOAL:
 				buffer.WriteString(GOALCHAR + VSEPERATOR)
+			case BOXONGOAL:
+				buffer.WriteString(BOXONGOALCHAR + VSEPERATOR)
+			case PLAYERONGOAL:
+				buffer.WriteString(PLAYERONGOALCHAR + VSEPERATOR)
 			default:
 				log.Fatalf("Unknown puzzle digit %d", v)
 			}
@@ -104,29 +112,29 @@ func (s *state) canMove(dir int) bool {
 	switch dir {
 	case UP:
 		next[0] = s.tiles[s.playerPos[0]-1][s.playerPos[1]]
-		if next[0] == BOX {
+		if (next[0] & BOX) != 0 {
 			next[1] = s.tiles[s.playerPos[0]-2][s.playerPos[1]]
 		}
 	case DOWN:
 		next[0] = s.tiles[s.playerPos[0]+1][s.playerPos[1]]
-		if next[0] == BOX {
+		if (next[0] & BOX) != 0 {
 			next[1] = s.tiles[s.playerPos[0]+2][s.playerPos[1]]
 		}
 	case LEFT:
 		next[0] = s.tiles[s.playerPos[0]][s.playerPos[1]-1]
-		if next[0] == BOX {
+		if (next[0] & BOX) != 0 {
 			next[1] = s.tiles[s.playerPos[0]][s.playerPos[1]-2]
 		}
 	case RIGHT:
 		next[0] = s.tiles[s.playerPos[0]][s.playerPos[1]+1]
-		if next[0] == BOX {
+		if (next[0] & BOX) != 0 {
 			next[1] = s.tiles[s.playerPos[0]][s.playerPos[1]+2]
 		}
 	}
-	if next[0] != BOX {
-		return next[0] == BLANK
+	if (next[0] & BOX) == 0 {
+		return (next[0]^BLANK == 0) || (next[0]^GOAL == 0)
 	} else {
-		return (next[0] ^ next[1]) == (BOX ^ BLANK)
+		return (next[1]^BLANK == 0) || (next[1]^GOAL == 0)
 	}
 }
 
@@ -145,32 +153,36 @@ func (s *state) move(dir int) state {
 	newState := s.makeCopy()
 	switch dir {
 	case UP:
-		if newState.tiles[newState.playerPos[0]-1][newState.playerPos[1]] == BOX {
-			newState.tiles[newState.playerPos[0]-2][newState.playerPos[1]] = BOX
+		if (newState.tiles[newState.playerPos[0]-1][newState.playerPos[1]] & BOX) != 0 {
+			newState.tiles[newState.playerPos[0]-2][newState.playerPos[1]] |= BOX
+			newState.tiles[newState.playerPos[0]-1][newState.playerPos[1]] &= ^BOX
 		}
-		newState.tiles[newState.playerPos[0]-1][newState.playerPos[1]] = PLAYER
-		newState.tiles[newState.playerPos[0]][newState.playerPos[1]] = BLANK
+		newState.tiles[newState.playerPos[0]-1][newState.playerPos[1]] |= PLAYER
+		newState.tiles[newState.playerPos[0]][newState.playerPos[1]] &= ^PLAYER
 		newState.playerPos[0] -= 1
 	case DOWN:
-		if newState.tiles[newState.playerPos[0]+1][newState.playerPos[1]] == BOX {
-			newState.tiles[newState.playerPos[0]+2][newState.playerPos[1]] = BOX
+		if (newState.tiles[newState.playerPos[0]+1][newState.playerPos[1]] & BOX) != 0 {
+			newState.tiles[newState.playerPos[0]+2][newState.playerPos[1]] |= BOX
+			newState.tiles[newState.playerPos[0]+1][newState.playerPos[1]] &= ^BOX
 		}
-		newState.tiles[newState.playerPos[0]+1][newState.playerPos[1]] = PLAYER
-		newState.tiles[newState.playerPos[0]][newState.playerPos[1]] = BLANK
+		newState.tiles[newState.playerPos[0]+1][newState.playerPos[1]] |= PLAYER
+		newState.tiles[newState.playerPos[0]][newState.playerPos[1]] &= ^PLAYER
 		newState.playerPos[0] += 1
 	case LEFT:
-		if newState.tiles[newState.playerPos[0]][newState.playerPos[1]-1] == BOX {
-			newState.tiles[newState.playerPos[0]][newState.playerPos[1]-2] = BOX
+		if (newState.tiles[newState.playerPos[0]][newState.playerPos[1]-1] & BOX) != 0 {
+			newState.tiles[newState.playerPos[0]][newState.playerPos[1]-2] |= BOX
+			newState.tiles[newState.playerPos[0]][newState.playerPos[1]-1] &= ^BOX
 		}
-		newState.tiles[newState.playerPos[0]][newState.playerPos[1]-1] = PLAYER
-		newState.tiles[newState.playerPos[0]][newState.playerPos[1]] = BLANK
+		newState.tiles[newState.playerPos[0]][newState.playerPos[1]-1] |= PLAYER
+		newState.tiles[newState.playerPos[0]][newState.playerPos[1]] &= ^PLAYER
 		newState.playerPos[1] -= 1
 	case RIGHT:
-		if newState.tiles[newState.playerPos[0]][newState.playerPos[1]+1] == BOX {
-			newState.tiles[newState.playerPos[0]][newState.playerPos[1]+2] = BOX
+		if (newState.tiles[newState.playerPos[0]][newState.playerPos[1]+1] & BOX) != 0 {
+			newState.tiles[newState.playerPos[0]][newState.playerPos[1]+2] |= BOX
+			newState.tiles[newState.playerPos[0]][newState.playerPos[1]+1] &= ^BOX
 		}
-		newState.tiles[newState.playerPos[0]][newState.playerPos[1]+1] = PLAYER
-		newState.tiles[newState.playerPos[0]][newState.playerPos[1]] = BLANK
+		newState.tiles[newState.playerPos[0]][newState.playerPos[1]+1] |= PLAYER
+		newState.tiles[newState.playerPos[0]][newState.playerPos[1]] &= ^PLAYER
 		newState.playerPos[1] += 1
 	}
 	return newState
@@ -192,5 +204,3 @@ func (s *state) States() []state {
 	}
 	return states
 }
-
-//TODO handle if box on goal

@@ -1,21 +1,25 @@
 package state
 
 const (
-	BLANK    = 0x0
-	BOX      = 0x1
-	OBSTACLE = 0x2
-	PLAYER   = 0x4
-	GOAL     = 0x8
+	BLANK     = 0x0
+	BOX       = 0x1
+	OBSTACLE  = 0x2
+	PLAYER    = 0x4
+	GOAL      = 0x8
+	BOXONGOAL = GOAL | BOX
+	PLAYERONGOAL=GOAL | PLAYER
 )
 
 const (
-	BLANKCHAR    = " "
-	BOXCHAR      = "o"
-	OBSTACLECHAR = "x"
-	PLAYERCHAR   = "*"
-	GOALCHAR     = "."
-	VSEPERATOR   = "|"
-	HSEPERATOR   = "-"
+	BLANKCHAR     = " "
+	BOXCHAR       = "o"
+	OBSTACLECHAR  = "x"
+	PLAYERCHAR    = "*"
+	GOALCHAR      = "."
+	BOXONGOALCHAR = "&"
+	PLAYERONGOALCHAR=","
+	VSEPERATOR    = "|"
+	HSEPERATOR    = "-"
 )
 
 const (
