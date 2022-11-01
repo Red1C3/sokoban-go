@@ -140,41 +140,57 @@ func (s *state) makeCopy() state {
 	return newState
 }
 
-func (s *state) move(dir int) (state, bool) {
-	if s.canMove(dir) {
-		newState := s.makeCopy()
-		switch dir {
-		case UP:
-			if newState.tiles[newState.playerPos[0]-1][newState.playerPos[1]] == BOX {
-				newState.tiles[newState.playerPos[0]-2][newState.playerPos[1]] = BOX
-			}
-			newState.tiles[newState.playerPos[0]-1][newState.playerPos[1]] = PLAYER
-			newState.tiles[newState.playerPos[0]][newState.playerPos[1]] = BLANK
-			newState.playerPos[0] -= 1
-		case DOWN:
-			if newState.tiles[newState.playerPos[0]+1][newState.playerPos[1]] == BOX {
-				newState.tiles[newState.playerPos[0]+2][newState.playerPos[1]] = BOX
-			}
-			newState.tiles[newState.playerPos[0]+1][newState.playerPos[1]] = PLAYER
-			newState.tiles[newState.playerPos[0]][newState.playerPos[1]] = BLANK
-			newState.playerPos[0] += 1
-		case LEFT:
-			if newState.tiles[newState.playerPos[0]][newState.playerPos[1]-1] == BOX {
-				newState.tiles[newState.playerPos[0]][newState.playerPos[1]-2] = BOX
-			}
-			newState.tiles[newState.playerPos[0]][newState.playerPos[1]-1] = PLAYER
-			newState.tiles[newState.playerPos[0]][newState.playerPos[1]] = BLANK
-			newState.playerPos[1] -= 1
-		case RIGHT:
-			if newState.tiles[newState.playerPos[0]][newState.playerPos[1]+1] == BOX {
-				newState.tiles[newState.playerPos[0]][newState.playerPos[1]+2] = BOX
-			}
-			newState.tiles[newState.playerPos[0]][newState.playerPos[1]+1] = PLAYER
-			newState.tiles[newState.playerPos[0]][newState.playerPos[1]] = BLANK
-			newState.playerPos[1] += 1
+// Assumes canMove is true
+func (s *state) move(dir int) state {
+	newState := s.makeCopy()
+	switch dir {
+	case UP:
+		if newState.tiles[newState.playerPos[0]-1][newState.playerPos[1]] == BOX {
+			newState.tiles[newState.playerPos[0]-2][newState.playerPos[1]] = BOX
 		}
-		return newState, true
-	} else {
-		return state{}, false
+		newState.tiles[newState.playerPos[0]-1][newState.playerPos[1]] = PLAYER
+		newState.tiles[newState.playerPos[0]][newState.playerPos[1]] = BLANK
+		newState.playerPos[0] -= 1
+	case DOWN:
+		if newState.tiles[newState.playerPos[0]+1][newState.playerPos[1]] == BOX {
+			newState.tiles[newState.playerPos[0]+2][newState.playerPos[1]] = BOX
+		}
+		newState.tiles[newState.playerPos[0]+1][newState.playerPos[1]] = PLAYER
+		newState.tiles[newState.playerPos[0]][newState.playerPos[1]] = BLANK
+		newState.playerPos[0] += 1
+	case LEFT:
+		if newState.tiles[newState.playerPos[0]][newState.playerPos[1]-1] == BOX {
+			newState.tiles[newState.playerPos[0]][newState.playerPos[1]-2] = BOX
+		}
+		newState.tiles[newState.playerPos[0]][newState.playerPos[1]-1] = PLAYER
+		newState.tiles[newState.playerPos[0]][newState.playerPos[1]] = BLANK
+		newState.playerPos[1] -= 1
+	case RIGHT:
+		if newState.tiles[newState.playerPos[0]][newState.playerPos[1]+1] == BOX {
+			newState.tiles[newState.playerPos[0]][newState.playerPos[1]+2] = BOX
+		}
+		newState.tiles[newState.playerPos[0]][newState.playerPos[1]+1] = PLAYER
+		newState.tiles[newState.playerPos[0]][newState.playerPos[1]] = BLANK
+		newState.playerPos[1] += 1
 	}
+	return newState
 }
+
+func (s *state) States() []state {
+	states := make([]state, 0)
+	if s.canMove(UP) {
+		states = append(states, s.move(UP))
+	}
+	if s.canMove(DOWN) {
+		states = append(states, s.move(DOWN))
+	}
+	if s.canMove(LEFT) {
+		states = append(states, s.move(LEFT))
+	}
+	if s.canMove(RIGHT) {
+		states = append(states, s.move(RIGHT))
+	}
+	return states
+}
+
+//TODO handle if box on goal
