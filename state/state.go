@@ -59,6 +59,7 @@ func NewState(puzzlePath string) State {
 				s.tiles[i+BORDER][j+BORDER] = BOXONGOAL
 			case PLAYERONGOALCHAR:
 				s.tiles[i+BORDER][j+BORDER] = PLAYERONGOAL
+				s.playerPos = [2]int{i + 1, j + 1}
 			default:
 				log.Fatalf("Unknown puzzle char %s", v)
 			}
@@ -203,6 +204,23 @@ func (s *State) States() []State {
 		states = append(states, s.move(RIGHT))
 	}
 	return states
+}
+
+func (s *State)StatesMap() map[int]State{
+	statesMap:=make(map[int]State)
+	if s.canMove(UP){
+		statesMap[UP]=s.move(UP)
+	}
+	if s.canMove(DOWN){
+		statesMap[DOWN]=s.move(DOWN)
+	}
+	if s.canMove(LEFT){
+		statesMap[LEFT]=s.move(LEFT)
+	}
+	if s.canMove(RIGHT){
+		statesMap[RIGHT]=s.move(RIGHT)
+	}
+	return statesMap
 }
 
 func (s *State) IsSolved() bool {
