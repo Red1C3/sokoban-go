@@ -204,3 +204,14 @@ func (s *state) States() []state {
 	}
 	return states
 }
+
+func (s *state) IsSolved() bool {
+	for _, a := range s.tiles {
+		for _, v := range a {
+			if v^GOAL == 0 {
+				return false
+			}
+		}
+	}
+	return true
+}
