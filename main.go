@@ -2,12 +2,10 @@ package main
 
 import (
 	"sokoban/algor"
-	"sokoban/state"
+	"sokoban/game"
 )
 
 func main() {
-	s := state.NewState("./puzzles/lab 1.json")
-	algor:=algor.NoAlgor{}
-	final:=algor.Search(s)
-	print(final.String())
+	g:=game.NewGame("./puzzles/test 1.json",&algor.NoAlgor{})
+	g.Play()
 }

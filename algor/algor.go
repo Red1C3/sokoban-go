@@ -2,7 +2,7 @@ package algor
 
 import "sokoban/state"
 
-type algor interface{
+type Algor interface{
 	Steps()int
 	Search(start state.State)state.State
 }
