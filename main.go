@@ -1,7 +1,10 @@
 package main
 
-import "sokoban/state"
+import (
+	"sokoban/state"
+)
 
-func main(){
-
+func main() {
+	s := state.NewState("./puzzles/test.json")
+	print(s.String())
 }
