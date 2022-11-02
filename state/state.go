@@ -206,19 +206,19 @@ func (s *State) States() []State {
 	return states
 }
 
-func (s *State)StatesMap() map[int]State{
-	statesMap:=make(map[int]State)
-	if s.canMove(UP){
-		statesMap[UP]=s.move(UP)
+func (s *State) StatesMap() map[int]State {
+	statesMap := make(map[int]State)
+	if s.canMove(UP) {
+		statesMap[UP] = s.move(UP)
 	}
-	if s.canMove(DOWN){
-		statesMap[DOWN]=s.move(DOWN)
+	if s.canMove(DOWN) {
+		statesMap[DOWN] = s.move(DOWN)
 	}
-	if s.canMove(LEFT){
-		statesMap[LEFT]=s.move(LEFT)
+	if s.canMove(LEFT) {
+		statesMap[LEFT] = s.move(LEFT)
 	}
-	if s.canMove(RIGHT){
-		statesMap[RIGHT]=s.move(RIGHT)
+	if s.canMove(RIGHT) {
+		statesMap[RIGHT] = s.move(RIGHT)
 	}
 	return statesMap
 }
@@ -226,7 +226,7 @@ func (s *State)StatesMap() map[int]State{
 func (s *State) IsSolved() bool {
 	for _, a := range s.tiles {
 		for _, v := range a {
-			if v^GOAL == 0 {
+			if (v^GOAL == 0) || (v^PLAYERONGOAL == 0) {
 				return false
 			}
 		}
