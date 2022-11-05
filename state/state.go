@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"log"
 	"os"
-	"strings"
 )
 
 type State struct {
@@ -92,7 +91,7 @@ func (s *State) String() string {
 				log.Fatalf("Unknown puzzle digit %d", v)
 			}
 		}
-		buffer.WriteString("\n" + strings.Repeat(HSEPERATOR, len(a)*3+1) + "\n")
+		buffer.WriteString("\n" /*+ strings.Repeat(HSEPERATOR, len(a)*3+1) + "\n"*/)
 	}
 	return buffer.String()
 }

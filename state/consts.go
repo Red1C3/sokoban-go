@@ -11,14 +11,14 @@ const (
 )
 
 const (
-	BLANKCHAR     = "🔲"
+	BLANKCHAR     = "⬜"
 	BOXCHAR       = "🟩"
 	OBSTACLECHAR  = "🟥"
 	PLAYERCHAR    = "🐈"
 	GOALCHAR      = "⭕"
 	BOXONGOALCHAR = "✅"
 	PLAYERONGOALCHAR="😿"
-	VSEPERATOR    = "┊"
+	VSEPERATOR    = ""
 	HSEPERATOR    = "╌"
 )
 
