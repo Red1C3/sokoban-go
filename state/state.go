@@ -10,6 +10,7 @@ import (
 type State struct {
 	tiles     [][]int
 	playerPos [2]int
+	parent *State
 }
 
 func NewState(puzzlePath string) State {
@@ -99,7 +100,7 @@ func (s *State) String() string {
 func (s *State) Equals(o *State) bool {
 	for i, a := range s.tiles {
 		for j := range a {
-			if s.tiles[i][j] != o.tiles[i][j] {
+			if s.tiles[i][j] != o.tiles[i][j] { //Does not compare parent
 				return false
 			}
 		}
@@ -185,6 +186,7 @@ func (s *State) move(dir int) State {
 		newState.tiles[newState.playerPos[0]][newState.playerPos[1]] &= ^PLAYER
 		newState.playerPos[1] += 1
 	}
+	newState.parent=s
 	return newState
 }
 
