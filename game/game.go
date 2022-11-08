@@ -17,8 +17,8 @@ func NewGame(puzzle string, algor algor.Algor) game {
 	return g
 }
 
-func (g *game) Play() {
-	start := state.NewState(g.puzzlePath)
+func (g *game) Play(heuristicFunc func(*state.State) int) {
+	start := state.NewState(g.puzzlePath, heuristicFunc)
 	final := g.algor.Search(start)
 	if final != nil {
 		path := final.Path()

@@ -7,5 +7,5 @@ import (
 
 func main() {
 	g:=game.NewGame("./puzzles/simple.json",&algor.Bfs{})
-	g.Play()
+	g.Play(algor.NoFunc)
 }
