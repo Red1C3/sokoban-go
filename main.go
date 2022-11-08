@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	g:=game.NewGame("./puzzles/simple.json",&algor.Dfs{})
+	g:=game.NewGame("./puzzles/simple.json",&algor.Bfs{})
 	g.Play()
 }

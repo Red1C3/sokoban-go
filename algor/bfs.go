@@ -1,6 +1,7 @@
 package algor
 
 import (
+	"container/list"
 	"sokoban/state"
 )
 
@@ -15,11 +16,12 @@ func (b *Bfs) Steps()int{
 
 func (b *Bfs)Search(start state.State)state.State{
 	visited := make([]state.State, 0)
-	queue := make([]state.State, 0)
-	queue = append(queue, start)
-	for len(queue) > 0 {
-		first := queue[0]
-		queue = queue[1:]
+
+	queue := list.New()
+	queue.PushBack(start)
+
+	for queue.Len() > 0 {
+		first := queue.Remove(queue.Front()).(state.State)
 		if first.IsSolved() {
 			return first
 		}
@@ -27,10 +29,11 @@ func (b *Bfs)Search(start state.State)state.State{
 		if !isVisited(visited, first) {
 			children := first.States()
 			for _, v := range children {
-				queue =append(queue,v)
+				queue.PushBack(v)
 			}
 			visited=append(visited, first)
 		}
 	}
+	
 	return state.State{}
 }

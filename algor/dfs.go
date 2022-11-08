@@ -1,6 +1,7 @@
 package algor
 
 import (
+	"container/list"
 	"sokoban/state"
 )
 
@@ -13,11 +14,12 @@ func (d *Dfs) Steps() int {
 
 func (d *Dfs) Search(start state.State) state.State {
 	visited := make([]state.State, 0)
-	stack := make([]state.State, 0)
-	stack = append(stack, start)
-	for len(stack) > 0 {
-		top := stack[len(stack)-1]
-		stack=stack[:len(stack)-1]
+
+	stack := list.New()
+	stack.PushBack(start)
+
+	for stack.Len() > 0 {
+		top := stack.Remove(stack.Back()).(state.State)
 
 		if top.IsSolved() {
 			return top
@@ -26,19 +28,11 @@ func (d *Dfs) Search(start state.State) state.State {
 		if !isVisited(visited, top) {
 			children := top.States()
 			for _, v := range children {
-				stack=append(stack,v)
+				stack.PushBack(v)
 			}
 			visited=append(visited,top)
 		}
 	}
-	return state.State{}
-}
 
-func isVisited(states []state.State, state state.State) bool {
-	for _, v := range states {
-		if v.Equals(&state) {
-			return true
-		}
-	}
-	return false
+	return state.State{}
 }
