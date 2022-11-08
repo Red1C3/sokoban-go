@@ -14,7 +14,7 @@ func (b *Bfs) Steps()int{
 }
 
 
-func (b *Bfs)Search(start state.State)state.State{
+func (b *Bfs)Search(start state.State)*state.State{
 	visited := make([]state.State, 0)
 
 	queue := list.New()
@@ -23,7 +23,7 @@ func (b *Bfs)Search(start state.State)state.State{
 	for queue.Len() > 0 {
 		first := queue.Remove(queue.Front()).(state.State)
 		if first.IsSolved() {
-			return first
+			return &first
 		}
 
 		if !isVisited(visited, first) {
@@ -35,5 +35,5 @@ func (b *Bfs)Search(start state.State)state.State{
 		}
 	}
 	
-	return state.State{}
+	return nil
 }

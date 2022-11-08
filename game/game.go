@@ -5,21 +5,26 @@ import (
 	"sokoban/state"
 )
 
-type game struct{
-	algor algor.Algor
+type game struct {
+	algor      algor.Algor
 	puzzlePath string
 }
 
-func NewGame(puzzle string,algor algor.Algor)game{
+func NewGame(puzzle string, algor algor.Algor) game {
 	var g game
-	g.puzzlePath=puzzle
-	g.algor=algor
+	g.puzzlePath = puzzle
+	g.algor = algor
 	return g
 }
 
-func (g *game)Play(){
-	start:=state.NewState(g.puzzlePath)
-	final:=g.algor.Search(start)
-	println(final.String())
-	print("YAY")
+func (g *game) Play() {
+	start := state.NewState(g.puzzlePath)
+	final := g.algor.Search(start)
+	if final != nil {
+		println(final.String())
+		print("YAY")
+	}else{
+		print("No solution was found")
+	}
+
 }

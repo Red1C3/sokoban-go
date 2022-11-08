@@ -17,7 +17,7 @@ func (a *NoAlgor) Steps() int {
 	return a.steps
 }
 
-func (a *NoAlgor) Search(start state.State) state.State {
+func (a *NoAlgor) Search(start state.State) *state.State {
 	a.steps = 0
 	a.curState = start
 	println(a.curState.String())
@@ -52,5 +52,5 @@ func (a *NoAlgor) Search(start state.State) state.State {
 		}
 		println(a.curState.String())
 	}
-	return a.curState
+	return &a.curState
 }

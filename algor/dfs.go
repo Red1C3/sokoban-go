@@ -12,7 +12,7 @@ func (d *Dfs) Steps() int {
 	return 0
 }
 
-func (d *Dfs) Search(start state.State) state.State {
+func (d *Dfs) Search(start state.State) *state.State {
 	visited := make([]state.State, 0)
 
 	stack := list.New()
@@ -22,7 +22,7 @@ func (d *Dfs) Search(start state.State) state.State {
 		top := stack.Remove(stack.Back()).(state.State)
 
 		if top.IsSolved() {
-			return top
+			return &top
 		}
 
 		if !isVisited(visited, top) {
@@ -34,5 +34,5 @@ func (d *Dfs) Search(start state.State) state.State {
 		}
 	}
 
-	return state.State{}
+	return nil
 }

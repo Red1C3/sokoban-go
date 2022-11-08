@@ -4,7 +4,7 @@ import "sokoban/state"
 
 type Algor interface{
 	Steps()int
-	Search(start state.State)state.State
+	Search(start state.State)*state.State
 }
 
 func isVisited(states []state.State, state state.State) bool {
