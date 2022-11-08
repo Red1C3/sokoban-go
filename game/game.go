@@ -8,17 +8,19 @@ import (
 type game struct {
 	algor      algor.Algor
 	puzzlePath string
+	heuristicFunc func(*state.State)int
 }
 
-func NewGame(puzzle string, algor algor.Algor) game {
+func NewGame(puzzle string, algor algor.Algor,heuristicFunc func(*state.State) int) game {
 	var g game
 	g.puzzlePath = puzzle
 	g.algor = algor
+	g.heuristicFunc=heuristicFunc
 	return g
 }
 
-func (g *game) Play(heuristicFunc func(*state.State) int) {
-	start := state.NewState(g.puzzlePath, heuristicFunc)
+func (g *game) Play() {
+	start := state.NewState(g.puzzlePath,g.heuristicFunc)
 	final := g.algor.Search(start)
 	if final != nil {
 		path := final.Path()
