@@ -10,7 +10,7 @@ import (
 type State struct {
 	tiles     [][]int
 	playerPos [2]int
-	parent *State
+	parent    *State
 }
 
 func NewState(puzzlePath string) State {
@@ -186,7 +186,7 @@ func (s *State) move(dir int) State {
 		newState.tiles[newState.playerPos[0]][newState.playerPos[1]] &= ^PLAYER
 		newState.playerPos[1] += 1
 	}
-	newState.parent=s
+	newState.parent = s
 	return newState
 }
 
@@ -233,4 +233,17 @@ func (s *State) IsSolved() bool {
 		}
 	}
 	return true
+}
+
+func (s *State) Path() []State {
+	path := make([]State, 0)
+	cur := s
+	for cur != nil {
+		path = append(path, *cur)
+		cur = cur.parent
+	}
+	for i, j := 0, len(path)-1; i < j; i, j = i+1, j-1 {
+		path[i], path[j] = path[j], path[i]
+	}
+	return path
 }

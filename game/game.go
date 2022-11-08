@@ -21,9 +21,12 @@ func (g *game) Play() {
 	start := state.NewState(g.puzzlePath)
 	final := g.algor.Search(start)
 	if final != nil {
-		println(final.String())
+		path := final.Path()
+		for _, s := range path {
+			println(s.String())
+		}
 		print("YAY")
-	}else{
+	} else {
 		print("No solution was found")
 	}
 
