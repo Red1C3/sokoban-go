@@ -8,10 +8,10 @@ func (pq PQ) Len() int {
 
 func (pq PQ) Less(i, j int) bool {
 	if pq[i].heuristic == nil {
-		*(pq[i].heuristic) = pq[i].heurisitcFunc(&pq[i])
+		pq[i].heuristic = pq[i].heurisitcFunc(&pq[i])
 	}
 	if pq[j].heuristic == nil {
-		*(pq[j].heuristic) = pq[j].heurisitcFunc(&pq[j])
+		pq[j].heuristic = pq[j].heurisitcFunc(&pq[j])
 	}
 	return *(pq[i].heuristic) < *(pq[j].heuristic)
 }
@@ -27,7 +27,7 @@ func (pq *PQ) Push(x any) {
 }
 
 func (pq *PQ) Pop() any {
-	v := (*pq)[len(*pq)]
+	v := (*pq)[len(*pq)-1]
 	*pq = (*pq)[:len(*pq)-1]
 	return v
 }

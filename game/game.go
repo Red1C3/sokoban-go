@@ -8,10 +8,10 @@ import (
 type game struct {
 	algor      algor.Algor
 	puzzlePath string
-	heuristicFunc func(*state.State)int
+	heuristicFunc func(*state.State)*int
 }
 
-func NewGame(puzzle string, algor algor.Algor,heuristicFunc func(*state.State) int) game {
+func NewGame(puzzle string, algor algor.Algor,heuristicFunc func(*state.State) *int) game {
 	var g game
 	g.puzzlePath = puzzle
 	g.algor = algor

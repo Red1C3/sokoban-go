@@ -8,14 +8,14 @@ import (
 )
 
 type State struct {
-	tiles         [][]int
-	playerPos     [2]int
+	Tiles     [][]int
+	playerPos [2]int
 	heuristic     *int
-	heurisitcFunc func(*State) int
+	heurisitcFunc func(*State) *int
 	parent        *State
 }
 
-func NewState(puzzlePath string, heurisitcFunc func(*State) int) State {
+func NewState(puzzlePath string, heurisitcFunc func(*State) *int) State {
 	var s State
 	puzzleFile, err := os.Open(puzzlePath)
 	if err != nil {
@@ -27,7 +27,7 @@ func NewState(puzzlePath string, heurisitcFunc func(*State) int) State {
 	if err != nil {
 		log.Fatalf("Failed to decode json file %s", puzzlePath)
 	}
-	s.tiles = make([][]int, len(puzzleString)+BORDER*2)
+	s.Tiles = make([][]int, len(puzzleString)+BORDER*2)
 	maxLength := len(puzzleString[0])
 
 	for _, a := range puzzleString {
@@ -36,10 +36,10 @@ func NewState(puzzlePath string, heurisitcFunc func(*State) int) State {
 		}
 	}
 
-	for i := 0; i < len(s.tiles); i++ {
-		s.tiles[i] = make([]int, maxLength+2*BORDER)
-		for j := 0; j < len(s.tiles[i]); j++ {
-			s.tiles[i][j] = OBSTACLE
+	for i := 0; i < len(s.Tiles); i++ {
+		s.Tiles[i] = make([]int, maxLength+2*BORDER)
+		for j := 0; j < len(s.Tiles[i]); j++ {
+			s.Tiles[i][j] = OBSTACLE
 		}
 	}
 
@@ -47,20 +47,20 @@ func NewState(puzzlePath string, heurisitcFunc func(*State) int) State {
 		for j, v := range a {
 			switch v {
 			case BLANKCHAR:
-				s.tiles[i+BORDER][j+BORDER] = BLANK
+				s.Tiles[i+BORDER][j+BORDER] = BLANK
 			case BOXCHAR:
-				s.tiles[i+BORDER][j+BORDER] = BOX
+				s.Tiles[i+BORDER][j+BORDER] = BOX
 			case OBSTACLECHAR:
-				s.tiles[i+BORDER][j+BORDER] = OBSTACLE
+				s.Tiles[i+BORDER][j+BORDER] = OBSTACLE
 			case PLAYERCHAR:
-				s.tiles[i+BORDER][j+BORDER] = PLAYER
+				s.Tiles[i+BORDER][j+BORDER] = PLAYER
 				s.playerPos = [2]int{i + 1, j + 1}
 			case GOALCHAR:
-				s.tiles[i+BORDER][j+BORDER] = GOAL
+				s.Tiles[i+BORDER][j+BORDER] = GOAL
 			case BOXONGOALCHAR:
-				s.tiles[i+BORDER][j+BORDER] = BOXONGOAL
+				s.Tiles[i+BORDER][j+BORDER] = BOXONGOAL
 			case PLAYERONGOALCHAR:
-				s.tiles[i+BORDER][j+BORDER] = PLAYERONGOAL
+				s.Tiles[i+BORDER][j+BORDER] = PLAYERONGOAL
 				s.playerPos = [2]int{i + 1, j + 1}
 			default:
 				log.Fatalf("Unknown puzzle char %s", v)
@@ -73,7 +73,7 @@ func NewState(puzzlePath string, heurisitcFunc func(*State) int) State {
 
 func (s *State) String() string {
 	var buffer bytes.Buffer
-	for _, a := range s.tiles {
+	for _, a := range s.Tiles {
 		buffer.WriteString(VSEPERATOR)
 		for _, v := range a {
 			switch v {
@@ -101,9 +101,9 @@ func (s *State) String() string {
 }
 
 func (s *State) Equals(o *State) bool {
-	for i, a := range s.tiles {
+	for i, a := range s.Tiles {
 		for j := range a {
-			if s.tiles[i][j] != o.tiles[i][j] { //Does not compare parent
+			if s.Tiles[i][j] != o.Tiles[i][j] { //Does not compare parent
 				return false
 			}
 		}
@@ -115,24 +115,24 @@ func (s *State) canMove(dir int) bool {
 	next := [2]int{0, 0}
 	switch dir {
 	case UP:
-		next[0] = s.tiles[s.playerPos[0]-1][s.playerPos[1]]
+		next[0] = s.Tiles[s.playerPos[0]-1][s.playerPos[1]]
 		if (next[0] & BOX) != 0 {
-			next[1] = s.tiles[s.playerPos[0]-2][s.playerPos[1]]
+			next[1] = s.Tiles[s.playerPos[0]-2][s.playerPos[1]]
 		}
 	case DOWN:
-		next[0] = s.tiles[s.playerPos[0]+1][s.playerPos[1]]
+		next[0] = s.Tiles[s.playerPos[0]+1][s.playerPos[1]]
 		if (next[0] & BOX) != 0 {
-			next[1] = s.tiles[s.playerPos[0]+2][s.playerPos[1]]
+			next[1] = s.Tiles[s.playerPos[0]+2][s.playerPos[1]]
 		}
 	case LEFT:
-		next[0] = s.tiles[s.playerPos[0]][s.playerPos[1]-1]
+		next[0] = s.Tiles[s.playerPos[0]][s.playerPos[1]-1]
 		if (next[0] & BOX) != 0 {
-			next[1] = s.tiles[s.playerPos[0]][s.playerPos[1]-2]
+			next[1] = s.Tiles[s.playerPos[0]][s.playerPos[1]-2]
 		}
 	case RIGHT:
-		next[0] = s.tiles[s.playerPos[0]][s.playerPos[1]+1]
+		next[0] = s.Tiles[s.playerPos[0]][s.playerPos[1]+1]
 		if (next[0] & BOX) != 0 {
-			next[1] = s.tiles[s.playerPos[0]][s.playerPos[1]+2]
+			next[1] = s.Tiles[s.playerPos[0]][s.playerPos[1]+2]
 		}
 	}
 	if (next[0] & BOX) == 0 {
@@ -147,10 +147,10 @@ func (s *State) makeCopy() State {
 		heuristic:     s.heuristic,
 		heurisitcFunc: s.heurisitcFunc}
 
-	newState.tiles = make([][]int, len(s.tiles))
-	for i, arr := range s.tiles {
-		newState.tiles[i] = make([]int, len(arr))
-		copy(newState.tiles[i], arr)
+	newState.Tiles = make([][]int, len(s.Tiles))
+	for i, arr := range s.Tiles {
+		newState.Tiles[i] = make([]int, len(arr))
+		copy(newState.Tiles[i], arr)
 	}
 	return newState
 }
@@ -160,36 +160,36 @@ func (s *State) move(dir int) State {
 	newState := s.makeCopy()
 	switch dir {
 	case UP:
-		if (newState.tiles[newState.playerPos[0]-1][newState.playerPos[1]] & BOX) != 0 {
-			newState.tiles[newState.playerPos[0]-2][newState.playerPos[1]] |= BOX
-			newState.tiles[newState.playerPos[0]-1][newState.playerPos[1]] &= ^BOX
+		if (newState.Tiles[newState.playerPos[0]-1][newState.playerPos[1]] & BOX) != 0 {
+			newState.Tiles[newState.playerPos[0]-2][newState.playerPos[1]] |= BOX
+			newState.Tiles[newState.playerPos[0]-1][newState.playerPos[1]] &= ^BOX
 		}
-		newState.tiles[newState.playerPos[0]-1][newState.playerPos[1]] |= PLAYER
-		newState.tiles[newState.playerPos[0]][newState.playerPos[1]] &= ^PLAYER
+		newState.Tiles[newState.playerPos[0]-1][newState.playerPos[1]] |= PLAYER
+		newState.Tiles[newState.playerPos[0]][newState.playerPos[1]] &= ^PLAYER
 		newState.playerPos[0] -= 1
 	case DOWN:
-		if (newState.tiles[newState.playerPos[0]+1][newState.playerPos[1]] & BOX) != 0 {
-			newState.tiles[newState.playerPos[0]+2][newState.playerPos[1]] |= BOX
-			newState.tiles[newState.playerPos[0]+1][newState.playerPos[1]] &= ^BOX
+		if (newState.Tiles[newState.playerPos[0]+1][newState.playerPos[1]] & BOX) != 0 {
+			newState.Tiles[newState.playerPos[0]+2][newState.playerPos[1]] |= BOX
+			newState.Tiles[newState.playerPos[0]+1][newState.playerPos[1]] &= ^BOX
 		}
-		newState.tiles[newState.playerPos[0]+1][newState.playerPos[1]] |= PLAYER
-		newState.tiles[newState.playerPos[0]][newState.playerPos[1]] &= ^PLAYER
+		newState.Tiles[newState.playerPos[0]+1][newState.playerPos[1]] |= PLAYER
+		newState.Tiles[newState.playerPos[0]][newState.playerPos[1]] &= ^PLAYER
 		newState.playerPos[0] += 1
 	case LEFT:
-		if (newState.tiles[newState.playerPos[0]][newState.playerPos[1]-1] & BOX) != 0 {
-			newState.tiles[newState.playerPos[0]][newState.playerPos[1]-2] |= BOX
-			newState.tiles[newState.playerPos[0]][newState.playerPos[1]-1] &= ^BOX
+		if (newState.Tiles[newState.playerPos[0]][newState.playerPos[1]-1] & BOX) != 0 {
+			newState.Tiles[newState.playerPos[0]][newState.playerPos[1]-2] |= BOX
+			newState.Tiles[newState.playerPos[0]][newState.playerPos[1]-1] &= ^BOX
 		}
-		newState.tiles[newState.playerPos[0]][newState.playerPos[1]-1] |= PLAYER
-		newState.tiles[newState.playerPos[0]][newState.playerPos[1]] &= ^PLAYER
+		newState.Tiles[newState.playerPos[0]][newState.playerPos[1]-1] |= PLAYER
+		newState.Tiles[newState.playerPos[0]][newState.playerPos[1]] &= ^PLAYER
 		newState.playerPos[1] -= 1
 	case RIGHT:
-		if (newState.tiles[newState.playerPos[0]][newState.playerPos[1]+1] & BOX) != 0 {
-			newState.tiles[newState.playerPos[0]][newState.playerPos[1]+2] |= BOX
-			newState.tiles[newState.playerPos[0]][newState.playerPos[1]+1] &= ^BOX
+		if (newState.Tiles[newState.playerPos[0]][newState.playerPos[1]+1] & BOX) != 0 {
+			newState.Tiles[newState.playerPos[0]][newState.playerPos[1]+2] |= BOX
+			newState.Tiles[newState.playerPos[0]][newState.playerPos[1]+1] &= ^BOX
 		}
-		newState.tiles[newState.playerPos[0]][newState.playerPos[1]+1] |= PLAYER
-		newState.tiles[newState.playerPos[0]][newState.playerPos[1]] &= ^PLAYER
+		newState.Tiles[newState.playerPos[0]][newState.playerPos[1]+1] |= PLAYER
+		newState.Tiles[newState.playerPos[0]][newState.playerPos[1]] &= ^PLAYER
 		newState.playerPos[1] += 1
 	}
 	newState.parent = s
@@ -232,7 +232,7 @@ func (s *State) StatesMap() map[int]State {
 }
 
 func (s *State) IsSolved() bool {
-	for _, a := range s.tiles {
+	for _, a := range s.Tiles {
 		for _, v := range a {
 			if (v^GOAL == 0) || (v^PLAYERONGOAL == 0) {
 				return false
