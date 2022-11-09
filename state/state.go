@@ -254,3 +254,7 @@ func (s *State) Path() []State {
 	}
 	return path
 }
+
+func(s *State)Pos()[2]int{
+	return s.playerPos
+}
