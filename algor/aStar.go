@@ -6,11 +6,11 @@ import (
 )
 
 type AStar struct{
-
+	steps int
 }
 
 func (a *AStar) Steps()int {
-	return 0
+	return a.steps
 }
 
 func (a *AStar)Search(start state.State)*state.State{
@@ -21,6 +21,7 @@ func (a *AStar)Search(start state.State)*state.State{
 	heap.Push(&pq,start)
 
 	for len(pq) > 0 {
+		a.steps++
 		min:=heap.Pop(&pq).(state.State)
 		if min.IsSolved() {
 			return &min

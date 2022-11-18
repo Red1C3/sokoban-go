@@ -6,11 +6,11 @@ import (
 )
 
 type Bfs struct{
-
+	steps int
 }
 
 func (b *Bfs) Steps()int{
-	return 0
+	return b.steps
 }
 
 
@@ -21,6 +21,7 @@ func (b *Bfs)Search(start state.State)*state.State{
 	queue.PushBack(start)
 
 	for queue.Len() > 0 {
+		b.steps++
 		first := queue.Remove(queue.Front()).(state.State)
 		if first.IsSolved() {
 			return &first

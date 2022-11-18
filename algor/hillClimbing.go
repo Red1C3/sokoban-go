@@ -5,10 +5,12 @@ import (
 	"sokoban/state"
 )
 
-type HillClimbing struct{}
+type HillClimbing struct{
+	steps int
+}
 
 func (hc *HillClimbing) Steps() int {
-	return 0
+	return hc.steps
 }
 
 func (hc *HillClimbing) Search(start state.State) *state.State {
@@ -19,6 +21,7 @@ func (hc *HillClimbing) Search(start state.State) *state.State {
 	heap.Push(&pq, start)
 
 	for len(pq) > 0 {
+		hc.steps++
 		min := heap.Pop(&pq).(state.State)
 		if min.IsSolved() {
 			return &min

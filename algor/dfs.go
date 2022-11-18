@@ -6,10 +6,11 @@ import (
 )
 
 type Dfs struct {
+	steps int
 }
 
 func (d *Dfs) Steps() int {
-	return 0
+	return d.steps
 }
 
 func (d *Dfs) Search(start state.State) *state.State {
@@ -19,6 +20,7 @@ func (d *Dfs) Search(start state.State) *state.State {
 	stack.PushBack(start)
 
 	for stack.Len() > 0 {
+		d.steps++
 		top := stack.Remove(stack.Back()).(state.State)
 
 		if top.IsSolved() {
