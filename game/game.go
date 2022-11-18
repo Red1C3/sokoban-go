@@ -1,6 +1,7 @@
 package game
 
 import (
+	"fmt"
 	"sokoban/algor"
 	"sokoban/state"
 )
@@ -27,7 +28,8 @@ func (g *game) Play() {
 		for _, s := range path {
 			println(s.String())
 		}
-		print("YAY")
+		println("YAY")
+		fmt.Printf("Moves = %d",final.Moves)
 	} else {
 		print("No solution was found")
 	}

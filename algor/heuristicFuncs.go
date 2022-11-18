@@ -9,6 +9,10 @@ var NoFunc = func(s *state.State) *int {
 	return nil
 }
 
+var UniformCost=func(s *state.State)*int{
+	return &s.Moves
+}
+
 var H1 = func(s *state.State) *int {
 	unsolvedBoxes := make([][2]int, 0)
 	unsolvedGoals := make([][2]int, 0)
@@ -30,8 +34,8 @@ var H1 = func(s *state.State) *int {
 		}
 		heuristic += minDist
 	}
-
-	return &heuristic
+	heuristicNCost:=heuristic+s.Moves
+	return &heuristicNCost
 }
 
 var H2 = func(s *state.State) *int {
@@ -65,8 +69,8 @@ var H2 = func(s *state.State) *int {
 	}
 
 	heuristic+=minDist
-
-	return &heuristic
+	heuristicNCost:=heuristic+s.Moves
+	return &heuristicNCost
 }
 
 func manhattanDist(a, b [2]int) int {

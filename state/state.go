@@ -8,11 +8,12 @@ import (
 )
 
 type State struct {
-	Tiles     [][]int
-	playerPos [2]int
+	Tiles         [][]int
+	playerPos     [2]int
 	heuristic     *int
 	heurisitcFunc func(*State) *int
-	parent        *State
+	parent *State
+	Moves  int
 }
 
 func NewState(puzzlePath string, heurisitcFunc func(*State) *int) State {
@@ -68,6 +69,7 @@ func NewState(puzzlePath string, heurisitcFunc func(*State) *int) State {
 		}
 	}
 	s.heurisitcFunc = heurisitcFunc
+	s.Moves =0
 	return s
 }
 
@@ -193,7 +195,8 @@ func (s *State) move(dir int) State {
 		newState.playerPos[1] += 1
 	}
 	newState.parent = s
-	newState.heurisitcFunc=s.heurisitcFunc
+	newState.heurisitcFunc = s.heurisitcFunc
+	newState.Moves =s.Moves +1
 	return newState
 }
 
@@ -205,11 +208,11 @@ func (s *State) States() []State {
 	if s.canMove(DOWN) {
 		states = append(states, s.move(DOWN))
 	}
-	if s.canMove(LEFT) {
-		states = append(states, s.move(LEFT))
-	}
 	if s.canMove(RIGHT) {
 		states = append(states, s.move(RIGHT))
+	}
+	if s.canMove(LEFT) {
+		states = append(states, s.move(LEFT))
 	}
 	return states
 }
@@ -255,6 +258,6 @@ func (s *State) Path() []State {
 	return path
 }
 
-func(s *State)Pos()[2]int{
+func (s *State) Pos() [2]int {
 	return s.playerPos
 }
