@@ -26,7 +26,6 @@ func (a *AStar)Search(start state.State)*state.State{
 		if min.IsSolved() {
 			return &min
 		}
-
 		if !isVisited(visited, min) {
 			children := min.States()
 			for _, v := range children {

@@ -16,6 +16,10 @@ type State struct {
 	Moves  int
 }
 
+func (s *State)Heuristic()*int{
+	return s.heuristic
+}
+
 func NewState(puzzlePath string, heurisitcFunc func(*State) *int) State {
 	var s State
 	puzzleFile, err := os.Open(puzzlePath)
@@ -146,7 +150,7 @@ func (s *State) canMove(dir int) bool {
 
 func (s *State) makeCopy() State {
 	newState := State{playerPos: s.playerPos,
-		heuristic:     s.heuristic,
+		heuristic:     nil,
 		heurisitcFunc: s.heurisitcFunc}
 
 	newState.Tiles = make([][]int, len(s.Tiles))
