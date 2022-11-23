@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	g:=game.NewGame("./puzzles/hard.json",&algor.AStar{},algor.GH2)
+	g := game.NewGame("./puzzles/simple.json", &algor.AStar{}, algor.UniformCost)
 	g.Play()
 }
