@@ -9,15 +9,14 @@ import (
 
 type State struct {
 	Tiles         [][]int
-	Edges         [5][][]int
 	playerPos     [2]int
 	heuristic     *int
 	heurisitcFunc func(*State) *int
-	parent        *State
-	Cost          int
+	parent *State
+	Moves  int
 }
 
-func (s *State) Heuristic() *int {
+func (s *State)Heuristic()*int{
 	return s.heuristic
 }
 
@@ -28,22 +27,11 @@ func NewState(puzzlePath string, heurisitcFunc func(*State) *int) State {
 		log.Fatalf("Failed to open file %s", puzzlePath)
 	}
 	decoder := json.NewDecoder(puzzleFile)
-	var puzzleStruct struct {
-		Puzzle [][]string
-		Up     [][]int
-		Down   [][]int
-		Right  [][]int
-		Left   [][]int
-	}
-	err = decoder.Decode(&puzzleStruct)
+	var puzzleString [][]string
+	err = decoder.Decode(&puzzleString)
 	if err != nil {
 		log.Fatalf("Failed to decode json file %s", puzzlePath)
 	}
-	puzzleString := puzzleStruct.Puzzle
-	s.Edges[UP] = puzzleStruct.Up
-	s.Edges[DOWN] = puzzleStruct.Down
-	s.Edges[LEFT] = puzzleStruct.Left
-	s.Edges[RIGHT] = puzzleStruct.Right
 	s.Tiles = make([][]int, len(puzzleString)+BORDER*2)
 	maxLength := len(puzzleString[0])
 
@@ -71,21 +59,21 @@ func NewState(puzzlePath string, heurisitcFunc func(*State) *int) State {
 				s.Tiles[i+BORDER][j+BORDER] = OBSTACLE
 			case PLAYERCHAR:
 				s.Tiles[i+BORDER][j+BORDER] = PLAYER
-				s.playerPos = [2]int{i + BORDER, j + BORDER}
+				s.playerPos = [2]int{i + 1, j + 1}
 			case GOALCHAR:
 				s.Tiles[i+BORDER][j+BORDER] = GOAL
 			case BOXONGOALCHAR:
 				s.Tiles[i+BORDER][j+BORDER] = BOXONGOAL
 			case PLAYERONGOALCHAR:
 				s.Tiles[i+BORDER][j+BORDER] = PLAYERONGOAL
-				s.playerPos = [2]int{i + BORDER, j + BORDER}
+				s.playerPos = [2]int{i + 1, j + 1}
 			default:
 				log.Fatalf("Unknown puzzle char %s", v)
 			}
 		}
 	}
 	s.heurisitcFunc = heurisitcFunc
-	s.Cost = 0
+	s.Moves =0
 	return s
 }
 
@@ -163,8 +151,7 @@ func (s *State) canMove(dir int) bool {
 func (s *State) makeCopy() State {
 	newState := State{playerPos: s.playerPos,
 		heuristic:     nil,
-		heurisitcFunc: s.heurisitcFunc,
-		Edges:         s.Edges}
+		heurisitcFunc: s.heurisitcFunc}
 
 	newState.Tiles = make([][]int, len(s.Tiles))
 	for i, arr := range s.Tiles {
@@ -213,8 +200,7 @@ func (s *State) move(dir int) State {
 	}
 	newState.parent = s
 	newState.heurisitcFunc = s.heurisitcFunc
-	oldPlayerPos := s.Pos()
-	newState.Cost = s.Cost + s.Edges[dir][oldPlayerPos[0]-BORDER][oldPlayerPos[1]-BORDER]
+	newState.Moves =s.Moves +1
 	return newState
 }
 
