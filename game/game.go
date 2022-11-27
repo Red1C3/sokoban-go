@@ -15,7 +15,7 @@ type game struct {
 
 // NewGame creates a new game instance.
 //
-// it takes the start state in puzzle, the desired algorithm in
+// it takes the start state path in puzzle, the desired algorithm in
 // algor, and the desired cost function in costFunc.
 //
 // In case the algorithm doesn't require a cost function, algor.NoFunc
