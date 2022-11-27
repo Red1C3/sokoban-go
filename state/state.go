@@ -59,14 +59,14 @@ func NewState(puzzlePath string, heurisitcFunc func(*State) *int) State {
 				s.Tiles[i+BORDER][j+BORDER] = OBSTACLE
 			case PLAYERCHAR:
 				s.Tiles[i+BORDER][j+BORDER] = PLAYER
-				s.playerPos = [2]int{i + 1, j + 1}
+				s.playerPos = [2]int{i + BORDER, j + BORDER}
 			case GOALCHAR:
 				s.Tiles[i+BORDER][j+BORDER] = GOAL
 			case BOXONGOALCHAR:
 				s.Tiles[i+BORDER][j+BORDER] = BOXONGOAL
 			case PLAYERONGOALCHAR:
 				s.Tiles[i+BORDER][j+BORDER] = PLAYERONGOAL
-				s.playerPos = [2]int{i + 1, j + 1}
+				s.playerPos = [2]int{i + BORDER, j + BORDER}
 			default:
 				log.Fatalf("Unknown puzzle char %s", v)
 			}
