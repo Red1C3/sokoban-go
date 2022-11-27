@@ -9,10 +9,6 @@ var NoFunc = func(s *state.State) *int {
 	return nil
 }
 
-var UniformCost=func(s *state.State)*int{
-	return &s.Moves
-}
-
 var GH1 = func(s *state.State) *int {
 	unsolvedBoxes := make([][2]int, 0)
 	unsolvedGoals := make([][2]int, 0)
@@ -34,7 +30,7 @@ var GH1 = func(s *state.State) *int {
 		}
 		heuristic += minDist
 	}
-	heuristicNCost:=heuristic+s.Moves
+	heuristicNCost := heuristic + s.Moves
 	return &heuristicNCost
 }
 
@@ -60,16 +56,16 @@ var GH2 = func(s *state.State) *int {
 		heuristic += minDist
 	}
 
-	player:=s.Pos()
+	player := s.Pos()
 
-	minDist:=math.MaxInt
+	minDist := math.MaxInt
 
-	for _,b:=range unsolvedBoxes{
-		minDist=int(math.Min(float64(minDist),float64(manhattanDist(player,b))))
+	for _, b := range unsolvedBoxes {
+		minDist = int(math.Min(float64(minDist), float64(manhattanDist(player, b))))
 	}
 
-	heuristic+=minDist
-	heuristicNCost:=heuristic+s.Moves
+	heuristic += minDist
+	heuristicNCost := heuristic + s.Moves
 	return &heuristicNCost
 }
 
@@ -119,18 +115,17 @@ var H2 = func(s *state.State) *int {
 		heuristic += minDist
 	}
 
-	player:=s.Pos()
+	player := s.Pos()
 
-	minDist:=math.MaxInt
+	minDist := math.MaxInt
 
-	for _,b:=range unsolvedBoxes{
-		minDist=int(math.Min(float64(minDist),float64(manhattanDist(player,b))))
+	for _, b := range unsolvedBoxes {
+		minDist = int(math.Min(float64(minDist), float64(manhattanDist(player, b))))
 	}
 
-	heuristic+=minDist
+	heuristic += minDist
 	return &heuristic
 }
-
 
 func manhattanDist(a, b [2]int) int {
 	return int(math.Abs(float64(a[0]-b[0])) + math.Abs(float64(a[1]-b[1])))

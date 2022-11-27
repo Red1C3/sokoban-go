@@ -23,7 +23,7 @@ func (a *NoAlgor) Search(start state.State) *state.State {
 	println(a.curState.String())
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
-		fmt.Printf(PROMPT)
+		fmt.Print(PROMPT)
 		scanned := scanner.Scan()
 		if !scanned {
 			log.Fatal("Failed to read input")
@@ -45,7 +45,7 @@ func (a *NoAlgor) Search(start state.State) *state.State {
 		}
 		if s, ok := nextStates[dir]; ok {
 			a.curState = s
-			a.steps+=1
+			a.steps += 1
 		}
 		if a.curState.IsSolved() {
 			break
