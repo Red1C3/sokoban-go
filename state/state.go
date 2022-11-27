@@ -8,16 +8,16 @@ import (
 )
 
 type State struct {
-	Tiles         [][]int
-	playerPos     [2]int
-	heuristic     *int
-	heurisitcFunc func(*State) *int
-	parent        *State
-	Moves         int
+	Tiles     [][]int
+	playerPos [2]int
+	cost      *int
+	costFunc  func(*State) *int
+	parent    *State
+	Moves     int
 }
 
 func (s *State) Heuristic() *int {
-	return s.heuristic
+	return s.cost
 }
 
 func NewState(puzzlePath string, heurisitcFunc func(*State) *int) State {
@@ -72,7 +72,7 @@ func NewState(puzzlePath string, heurisitcFunc func(*State) *int) State {
 			}
 		}
 	}
-	s.heurisitcFunc = heurisitcFunc
+	s.costFunc = heurisitcFunc
 	s.Moves = 0
 	return s
 }
@@ -149,8 +149,8 @@ func (s *State) canMove(dir int) bool {
 
 func (s *State) makeCopy() State {
 	newState := State{playerPos: s.playerPos,
-		heuristic:     nil,
-		heurisitcFunc: s.heurisitcFunc}
+		cost:     nil,
+		costFunc: s.costFunc}
 
 	newState.Tiles = make([][]int, len(s.Tiles))
 	for i, arr := range s.Tiles {
@@ -198,7 +198,7 @@ func (s *State) move(dir int) State {
 		newState.playerPos[1] += 1
 	}
 	newState.parent = s
-	newState.heurisitcFunc = s.heurisitcFunc
+	newState.costFunc = s.costFunc
 	newState.Moves = s.Moves + 1
 	return newState
 }

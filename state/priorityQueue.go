@@ -7,13 +7,13 @@ func (pq PQ) Len() int {
 }
 
 func (pq PQ) Less(i, j int) bool {
-	if pq[i].heuristic == nil {
-		pq[i].heuristic = pq[i].heurisitcFunc(&pq[i])
+	if pq[i].cost == nil {
+		pq[i].cost = pq[i].costFunc(&pq[i])
 	}
-	if pq[j].heuristic == nil {
-		pq[j].heuristic = pq[j].heurisitcFunc(&pq[j])
+	if pq[j].cost == nil {
+		pq[j].cost = pq[j].costFunc(&pq[j])
 	}
-	return *(pq[i].heuristic) < *(pq[j].heuristic)
+	return *(pq[i].cost) < *(pq[j].cost)
 }
 
 func (pq PQ) Swap(i, j int) {
