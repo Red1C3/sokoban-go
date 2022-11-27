@@ -5,16 +5,16 @@ import (
 	"sokoban/state"
 )
 
-type Bfs struct{
+// Bfs implements BFS algorithm.
+type Bfs struct {
 	steps int
 }
 
-func (b *Bfs) Steps()int{
+func (b *Bfs) Steps() int {
 	return b.steps
 }
 
-
-func (b *Bfs)Search(start state.State)*state.State{
+func (b *Bfs) Search(start state.State) *state.State {
 	visited := make([]state.State, 0)
 
 	queue := list.New()
@@ -32,9 +32,9 @@ func (b *Bfs)Search(start state.State)*state.State{
 			for _, v := range children {
 				queue.PushBack(v)
 			}
-			visited=append(visited, first)
+			visited = append(visited, first)
 		}
 	}
-	
+
 	return nil
 }

@@ -1,3 +1,4 @@
+// Package state implements Sokoban state structure and provides other helper functions.
 package state
 
 import (
@@ -7,6 +8,10 @@ import (
 	"os"
 )
 
+// State is the main structure that stores the
+// Sokoban board in Tiles,
+// and the number of moves to get to this state
+// in Moves.
 type State struct {
 	Tiles     [][]int
 	playerPos [2]int
@@ -16,11 +21,15 @@ type State struct {
 	Moves     int
 }
 
-func (s *State) Heuristic() *int {
+// Cost returns the cost of a state
+func (s *State) Cost() *int {
 	return s.cost
 }
 
-func NewState(puzzlePath string, heurisitcFunc func(*State) *int) State {
+// NewState takes a the puzzle file path in puzzlePath,
+// and the cost function in costFunc, and returns a state
+// (mostly a start state).
+func NewState(puzzlePath string, costFunc func(*State) *int) State {
 	var s State
 	puzzleFile, err := os.Open(puzzlePath)
 	if err != nil {
@@ -72,11 +81,12 @@ func NewState(puzzlePath string, heurisitcFunc func(*State) *int) State {
 			}
 		}
 	}
-	s.costFunc = heurisitcFunc
+	s.costFunc = costFunc
 	s.Moves = 0
 	return s
 }
 
+// String returns a human-readable representation of s.
 func (s *State) String() string {
 	var buffer bytes.Buffer
 	for _, a := range s.Tiles {
@@ -105,6 +115,7 @@ func (s *State) String() string {
 	return buffer.String()
 }
 
+// Equlas checks if s is identical to o.
 func (s *State) Equals(o *State) bool {
 	for i, a := range s.Tiles {
 		for j := range a {
@@ -160,7 +171,7 @@ func (s *State) makeCopy() State {
 	return newState
 }
 
-// Assumes canMove is true
+// move assumes canMove is true
 func (s *State) move(dir int) State {
 	newState := s.makeCopy()
 	switch dir {
@@ -203,6 +214,7 @@ func (s *State) move(dir int) State {
 	return newState
 }
 
+// States returns all the possible states from s
 func (s *State) States() []State {
 	states := make([]State, 0)
 	if s.canMove(UP) {
@@ -220,6 +232,8 @@ func (s *State) States() []State {
 	return states
 }
 
+// StatesMap maps the possible states from s to
+// their direction enum (UP/DOWN/LEFT/RIGHT)
 func (s *State) StatesMap() map[int]State {
 	statesMap := make(map[int]State)
 	if s.canMove(UP) {
@@ -237,6 +251,7 @@ func (s *State) StatesMap() map[int]State {
 	return statesMap
 }
 
+// IsSolved checks if s is a solution state
 func (s *State) IsSolved() bool {
 	for _, a := range s.Tiles {
 		for _, v := range a {
@@ -248,6 +263,8 @@ func (s *State) IsSolved() bool {
 	return true
 }
 
+// Path returns the path from the oldest ancestor of s
+// to s itself
 func (s *State) Path() []State {
 	path := make([]State, 0)
 	cur := s
@@ -261,6 +278,7 @@ func (s *State) Path() []State {
 	return path
 }
 
+// Pos returns the player position (x,y) in s
 func (s *State) Pos() [2]int {
 	return s.playerPos
 }

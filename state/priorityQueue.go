@@ -1,5 +1,6 @@
 package state
 
+// PQ is the underlying states priority queue.
 type PQ []State
 
 func (pq PQ) Len() int {

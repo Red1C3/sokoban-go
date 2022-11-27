@@ -2,13 +2,15 @@ package algor
 
 import "strings"
 
-const(
-	UP="u"
-	DOWN="d"
-	LEFT="l"
-	RIGHT="r"
+// Keyboard input keys for algor.NoAlgor
+const (
+	UP    = "u"
+	DOWN  = "d"
+	LEFT  = "l"
+	RIGHT = "r"
 )
 
-var(
-	PROMPT=strings.Join([]string{UP,DOWN,LEFT,RIGHT},", ")+ ">"
+// On screen prompt when using algor.NoAlgor
+var (
+	PROMPT = strings.Join([]string{UP, DOWN, LEFT, RIGHT}, ", ") + ">"
 )

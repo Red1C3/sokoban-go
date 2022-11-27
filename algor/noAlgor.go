@@ -8,6 +8,9 @@ import (
 	"sokoban/state"
 )
 
+// NoAlgor is used for actual human input.
+// it implements algor algorithm so it can be used
+// the same as other algorithms.
 type NoAlgor struct {
 	steps    int
 	curState state.State

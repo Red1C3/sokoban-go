@@ -5,7 +5,8 @@ import (
 	"sokoban/state"
 )
 
-type HillClimbing struct{
+// HillClimbing implements itself.
+type HillClimbing struct {
 	steps int
 }
 

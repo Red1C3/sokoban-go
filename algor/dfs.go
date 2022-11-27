@@ -5,6 +5,7 @@ import (
 	"sokoban/state"
 )
 
+// Dfs implements the DFS algorithm.
 type Dfs struct {
 	steps int
 }
@@ -32,7 +33,7 @@ func (d *Dfs) Search(start state.State) *state.State {
 			for _, v := range children {
 				stack.PushBack(v)
 			}
-			visited=append(visited,top)
+			visited = append(visited, top)
 		}
 	}
 

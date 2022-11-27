@@ -1,5 +1,6 @@
 package state
 
+// State tiles integer representations
 const (
 	BLANK        = 0x0
 	BOX          = 0x1
@@ -10,6 +11,7 @@ const (
 	PLAYERONGOAL = GOAL | PLAYER
 )
 
+// State tiles human-readable representation (for both input and output)
 const (
 	BLANKCHAR        = "⬜"
 	BOXCHAR          = "🟩"
@@ -20,6 +22,7 @@ const (
 	PLAYERONGOALCHAR = "😿"
 )
 
+// Directions enum
 const (
 	_ = iota
 	UP
@@ -28,4 +31,5 @@ const (
 	RIGHT
 )
 
+// Added border for states (should never be less than 1)
 const BORDER = 1
