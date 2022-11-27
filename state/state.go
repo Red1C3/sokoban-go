@@ -12,11 +12,11 @@ type State struct {
 	playerPos     [2]int
 	heuristic     *int
 	heurisitcFunc func(*State) *int
-	parent *State
-	Moves  int
+	parent        *State
+	Moves         int
 }
 
-func (s *State)Heuristic()*int{
+func (s *State) Heuristic() *int {
 	return s.heuristic
 }
 
@@ -73,35 +73,34 @@ func NewState(puzzlePath string, heurisitcFunc func(*State) *int) State {
 		}
 	}
 	s.heurisitcFunc = heurisitcFunc
-	s.Moves =0
+	s.Moves = 0
 	return s
 }
 
 func (s *State) String() string {
 	var buffer bytes.Buffer
 	for _, a := range s.Tiles {
-		buffer.WriteString(VSEPERATOR)
 		for _, v := range a {
 			switch v {
 			case BLANK:
-				buffer.WriteString(BLANKCHAR + VSEPERATOR)
+				buffer.WriteString(BLANKCHAR)
 			case OBSTACLE:
-				buffer.WriteString(OBSTACLECHAR + VSEPERATOR)
+				buffer.WriteString(OBSTACLECHAR)
 			case BOX:
-				buffer.WriteString(BOXCHAR + VSEPERATOR)
+				buffer.WriteString(BOXCHAR)
 			case PLAYER:
-				buffer.WriteString(PLAYERCHAR + VSEPERATOR)
+				buffer.WriteString(PLAYERCHAR)
 			case GOAL:
-				buffer.WriteString(GOALCHAR + VSEPERATOR)
+				buffer.WriteString(GOALCHAR)
 			case BOXONGOAL:
-				buffer.WriteString(BOXONGOALCHAR + VSEPERATOR)
+				buffer.WriteString(BOXONGOALCHAR)
 			case PLAYERONGOAL:
-				buffer.WriteString(PLAYERONGOALCHAR + VSEPERATOR)
+				buffer.WriteString(PLAYERONGOALCHAR)
 			default:
 				log.Fatalf("Unknown puzzle digit %d", v)
 			}
 		}
-		buffer.WriteString("\n" /*+ strings.Repeat(HSEPERATOR, len(a)*3+1) + "\n"*/)
+		buffer.WriteString("\n")
 	}
 	return buffer.String()
 }
@@ -200,7 +199,7 @@ func (s *State) move(dir int) State {
 	}
 	newState.parent = s
 	newState.heurisitcFunc = s.heurisitcFunc
-	newState.Moves =s.Moves +1
+	newState.Moves = s.Moves + 1
 	return newState
 }
 
