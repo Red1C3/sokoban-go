@@ -7,21 +7,21 @@ import (
 )
 
 type game struct {
-	algor         algor.Algor
-	puzzlePath    string
-	heuristicFunc func(*state.State) *int
+	algor      algor.Algor
+	puzzlePath string
+	heuristicFunc func(*state.State)*int
 }
 
-func NewGame(puzzle string, algor algor.Algor, heuristicFunc func(*state.State) *int) game {
+func NewGame(puzzle string, algor algor.Algor,heuristicFunc func(*state.State) *int) game {
 	var g game
 	g.puzzlePath = puzzle
 	g.algor = algor
-	g.heuristicFunc = heuristicFunc
+	g.heuristicFunc=heuristicFunc
 	return g
 }
 
 func (g *game) Play() {
-	start := state.NewState(g.puzzlePath, g.heuristicFunc)
+	start := state.NewState(g.puzzlePath,g.heuristicFunc)
 	final := g.algor.Search(start)
 	if final != nil {
 		path := final.Path()
@@ -29,8 +29,7 @@ func (g *game) Play() {
 			println(s.String())
 		}
 		println("YAY")
-		fmt.Printf("Moves = %d\n", len(path)-1)
-		fmt.Printf("Cost = %d", final.Cost)
+		fmt.Printf("Moves = %d",final.Moves)
 	} else {
 		print("No solution was found")
 	}

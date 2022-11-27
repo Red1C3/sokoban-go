@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"log"
 	"os"
-	"strconv"
 )
 
 type State struct {
@@ -13,11 +12,11 @@ type State struct {
 	playerPos     [2]int
 	heuristic     *int
 	heurisitcFunc func(*State) *int
-	parent        *State
-	Cost          int
+	parent *State
+	Moves  int
 }
 
-func (s *State) Heuristic() *int {
+func (s *State)Heuristic()*int{
 	return s.heuristic
 }
 
@@ -60,25 +59,21 @@ func NewState(puzzlePath string, heurisitcFunc func(*State) *int) State {
 				s.Tiles[i+BORDER][j+BORDER] = OBSTACLE
 			case PLAYERCHAR:
 				s.Tiles[i+BORDER][j+BORDER] = PLAYER
-				s.playerPos = [2]int{i + BORDER, j + BORDER}
+				s.playerPos = [2]int{i + 1, j + 1}
 			case GOALCHAR:
 				s.Tiles[i+BORDER][j+BORDER] = GOAL
 			case BOXONGOALCHAR:
 				s.Tiles[i+BORDER][j+BORDER] = BOXONGOAL
 			case PLAYERONGOALCHAR:
 				s.Tiles[i+BORDER][j+BORDER] = PLAYERONGOAL
-				s.playerPos = [2]int{i + BORDER, j + BORDER}
+				s.playerPos = [2]int{i + 1, j + 1}
 			default:
-				val, err := strconv.ParseInt(v, 10, 64)
-				if err != nil {
-					log.Fatalf("Unknown puzzle char %s", v)
-				}
-				s.Tiles[i+BORDER][j+BORDER] = int(BLANK | (val << 4))
+				log.Fatalf("Unknown puzzle char %s", v)
 			}
 		}
 	}
 	s.heurisitcFunc = heurisitcFunc
-	s.Cost = 0
+	s.Moves =0
 	return s
 }
 
@@ -103,11 +98,7 @@ func (s *State) String() string {
 			case PLAYERONGOAL:
 				buffer.WriteString(PLAYERONGOALCHAR + VSEPERATOR)
 			default:
-				if v&PLAYER == PLAYER {
-					buffer.WriteString(PLAYERONCOSTCHAR + VSEPERATOR)
-				} else {
-					buffer.WriteString(COSTCHAR + VSEPERATOR)
-				}
+				log.Fatalf("Unknown puzzle digit %d", v)
 			}
 		}
 		buffer.WriteString("\n" /*+ strings.Repeat(HSEPERATOR, len(a)*3+1) + "\n"*/)
@@ -151,9 +142,9 @@ func (s *State) canMove(dir int) bool {
 		}
 	}
 	if (next[0] & BOX) == 0 {
-		return (((next[0] ^ BLANK) & 0xF) == 0) || (((next[0] ^ GOAL) & 0xF) == 0)
+		return (next[0]^BLANK == 0) || (next[0]^GOAL == 0)
 	} else {
-		return (((next[1] ^ BLANK) & 0xF) == 0) || (((next[1] ^ GOAL) & 0xF) == 0)
+		return (next[1]^BLANK == 0) || (next[1]^GOAL == 0)
 	}
 }
 
@@ -209,8 +200,7 @@ func (s *State) move(dir int) State {
 	}
 	newState.parent = s
 	newState.heurisitcFunc = s.heurisitcFunc
-	newState.Cost = s.Cost + 1 +
-		(newState.Tiles[newState.playerPos[0]][newState.playerPos[1]] >> 4)
+	newState.Moves =s.Moves +1
 	return newState
 }
 
@@ -251,7 +241,7 @@ func (s *State) StatesMap() map[int]State {
 func (s *State) IsSolved() bool {
 	for _, a := range s.Tiles {
 		for _, v := range a {
-			if (((v ^ GOAL) & 0xF) == 0) || (((v ^ PLAYERONGOAL) & 0xF) == 0) {
+			if (v^GOAL == 0) || (v^PLAYERONGOAL == 0) {
 				return false
 			}
 		}
