@@ -2,7 +2,7 @@ package algor
 
 import (
 	"container/heap"
-	"sokoban/state"
+	"sokoban-go/state"
 )
 
 // HillClimbing implements itself.

@@ -30,8 +30,8 @@ package main
 import (
 	"log"
 	"os"
-	"sokoban/algor"
-	"sokoban/game"
+	"sokoban-go/algor"
+	"sokoban-go/game"
 )
 
 func main() {

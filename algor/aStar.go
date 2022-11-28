@@ -2,7 +2,7 @@ package algor
 
 import (
 	"container/heap"
-	"sokoban/state"
+	"sokoban-go/state"
 )
 
 // AStart implements a heuristic-agnostic A* algorithm.

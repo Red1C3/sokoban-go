@@ -1,7 +1,7 @@
 // Package algor provides multiple algorithm that implements algor interface
 package algor
 
-import "sokoban/state"
+import "sokoban-go/state"
 
 // Algor is an interface for sokoban solving algorithms
 // Search method is the core of the interface, it takes

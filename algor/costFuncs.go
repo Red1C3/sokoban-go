@@ -2,7 +2,7 @@ package algor
 
 import (
 	"math"
-	"sokoban/state"
+	"sokoban-go/state"
 )
 
 // Cost functions.

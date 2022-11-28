@@ -3,8 +3,8 @@ package game
 
 import (
 	"fmt"
-	"sokoban/algor"
-	"sokoban/state"
+	"sokoban-go/algor"
+	"sokoban-go/state"
 )
 
 type game struct {

@@ -2,7 +2,7 @@ package algor
 
 import (
 	"container/list"
-	"sokoban/state"
+	"sokoban-go/state"
 )
 
 // Dfs implements the DFS algorithm.

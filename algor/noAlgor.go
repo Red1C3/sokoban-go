@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"sokoban/state"
+	"sokoban-go/state"
 )
 
 // NoAlgor is used for actual human input.
