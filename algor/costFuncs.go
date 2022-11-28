@@ -2,7 +2,8 @@ package algor
 
 import (
 	"math"
-	"sokoban-go/state"
+
+	"codeberg.org/RedDeadAlice/sokoban-go/state"
 )
 
 // Cost functions.

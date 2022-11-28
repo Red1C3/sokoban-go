@@ -30,8 +30,9 @@ package main
 import (
 	"log"
 	"os"
-	"sokoban-go/algor"
-	"sokoban-go/game"
+
+	"codeberg.org/RedDeadAlice/sokoban-go/algor"
+	"codeberg.org/RedDeadAlice/sokoban-go/game"
 )
 
 func main() {

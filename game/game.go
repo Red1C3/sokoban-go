@@ -3,8 +3,9 @@ package game
 
 import (
 	"fmt"
-	"sokoban-go/algor"
-	"sokoban-go/state"
+
+	"codeberg.org/RedDeadAlice/sokoban-go/algor"
+	"codeberg.org/RedDeadAlice/sokoban-go/state"
 )
 
 type game struct {

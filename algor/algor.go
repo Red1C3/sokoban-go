@@ -1,7 +1,7 @@
 // Package algor provides multiple algorithm that implements algor interface
 package algor
 
-import "sokoban-go/state"
+import "codeberg.org/RedDeadAlice/sokoban-go/state"
 
 // Algor is an interface for sokoban solving algorithms
 // Search method is the core of the interface, it takes

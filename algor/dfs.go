@@ -2,7 +2,8 @@ package algor
 
 import (
 	"container/list"
-	"sokoban-go/state"
+
+	"codeberg.org/RedDeadAlice/sokoban-go/state"
 )
 
 // Dfs implements the DFS algorithm.

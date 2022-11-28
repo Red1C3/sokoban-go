@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"sokoban-go/state"
+
+	"codeberg.org/RedDeadAlice/sokoban-go/state"
 )
 
 // NoAlgor is used for actual human input.
